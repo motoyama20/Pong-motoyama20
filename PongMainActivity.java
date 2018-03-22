@@ -15,6 +15,13 @@ import android.widget.LinearLayout;
  *
  * This is the activity for the Pong game. It attaches a PongAnimator to
  * an AnimationSurface.
+ * This game animates a ball that bounces off three edges of a rectangular screen.
+ * On the fourth edge, the ball may bounce off the stationary paddle or "fall off" the screen
+ * if it does not hit the paddle.
+ * Once a ball falls off, the ball will reappear by falling from a random position at the top
+ * off the screen.
+ * The first ball is dropped automatically when the program is ran.
+ * More balls may be added by tapping the screen.
  *
  * @author Andrew Nuxoll
  * @author Steven R. Vegdahl

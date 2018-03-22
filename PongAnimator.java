@@ -11,11 +11,7 @@ import java.util.ArrayList;
 
 
 /**
- * Class that animates a ball that bounces off three edges of a rectangular screen.
- * On the fourth edge, the ball may bounce off the stationary paddle or "fall off" the screen
- * if it does not hit the paddle.
- * Once a ball falls off the ball will reappear by falling from a random position at the top
- * off the screen.
+ * Class that animates the ball that bounces off three edges of a rectangular screen.
  * More balls may be added by tapping the screen.
  *
  * @author Steve Vegdahl
