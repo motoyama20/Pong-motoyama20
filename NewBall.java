@@ -16,19 +16,37 @@ import java.util.Random;
  */
 public class NewBall {
 
-    private int countX = (int) (Math.random()*100+1);
-    private int countY = 0;
-    private boolean xGoBackwards = false;
-    private boolean yGoBackwards = false;
-    private int speed=15;
+    //instance variables
+    private int countX; //count that continues to move ball on x axis
+    private int countY; //count that continues to move ball on y axis
+    private boolean xGoBackwards = false; //to reverse x direction of ball
+    private boolean yGoBackwards = false; //to reverse y direction of ball
+    private int speed; //to scale the speed of the ball
+    private static int currScore=0; //to keep track of score count for each ball
+    private static int dropNum=0; //accounts for the ball if dropped
+    private int numX; //x position of ball
+    private int numY; //y position of ball
+
 
     /**
-     * Draw the ball and manage x and y coordinate of ball
-     * Have it act appropriately if it hits an edge of the screen
+     * Constructor to set initial location and speed factor of ball
+     */
+    public NewBall() {
+        countX = (int) (Math.random()*100+1);
+        countY = 10;
+        speed = 15;
+    }
+
+    /**
+     * Draw the ball and manage x and y coordinate of ball (including direction)
+     * Have it act appropriately if it hits an edge of the screen or the paddle
      *
      * @param g the graphics object on which to draw
      */
-    public void drawBall( Canvas g) {
+    public void drawBall( Canvas g, int paddleX ) {
+
+        Paint blackPaint = new Paint();
+        blackPaint.setColor(Color.BLACK);
 
         // bump x and y counts either up or down by one, depending on whether
         // we are in "backwards mode".
@@ -48,10 +66,8 @@ public class NewBall {
 
         // Determine the pixel position of our ball.  Multiplying by speed
         // has the effect of moving a certain amount of pixels per frame.
-
-        int numX = (countX*speed); //current x-coordinate of ball
-        int numY = (countY*speed); //current y-coordinate of ball
-
+        numX = (countX*speed);
+        numY = (countY*speed);
 
         //if the ball hits the left edge of screen (the x coordinate gets lower than zero)
         // then reverse x-direction to bounce off wall
@@ -70,18 +86,26 @@ public class NewBall {
             yGoBackwards = false;
         }
 
-        //if the ball hits a part of the bottom wall that is not the paddle, let the ball
-        //"fall" past the screen and reappear randomly at the top at a random speed
-        if( numY>g.getHeight() && (numX<565 || numX>1483) ) {
+        /*
+            if the ball hits a part of the bottom wall that is not the paddle:
+            - let the ball "fall" past the screen and reappear randomly at the top at a
+                random speed
+            - subtract 5 from the total score
+            - add one to the drop count
+         */
+        if( numY>g.getHeight() && (numX<(paddleX-450) || numX>(paddleX+450)) ) {
             countX = (int) (Math.random()*(g.getWidth()/speed)+1);
-            countY = 0;
-            speed();
+            countY = 10;
+            currScore-=5;
+            dropNum++;
+
         }
 
-        //if the ball hits any part of the paddle on the bottom edge, make it bounce off the
-        //paddle by reversing y-direction
-        if( numX>565 && numX<1483 && numY>1292 ) {
+        //if the ball hits the paddle, make it bounce off the paddle by reversing y-direction
+        //also increase the total score by 1
+        if( numX>(paddleX-450) && numX<(paddleX+450) && numY>1292 ) {
             yGoBackwards = true;
+            currScore+=1;
         }
 
 
@@ -90,7 +114,6 @@ public class NewBall {
         redPaint.setColor(Color.RED);
         g.drawCircle(numX, numY, 60,redPaint);
         redPaint.setColor(0xff0000ff);
-
 
     }
 
@@ -119,5 +142,17 @@ public class NewBall {
 
     }
 
+    /**
+     * To reverse the y direction and have the ball bounce off a brick if it hits one
+     */
+    public void reverseY() {
+        yGoBackwards = false;
+    }
+
+    public int getCurrScore() {return currScore;}
+    public int getDropNum() {return dropNum;}
+
+    public int getNumX() {return numX;}
+    public int getNumY() {return numY;}
 
 }
